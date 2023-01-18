@@ -163,3 +163,57 @@ nano /etc/hosts
 my-arch-linux为我为电脑取的名字,写成下方这个样子就可以了  
 ![image](https://user-images.githubusercontent.com/94089248/213189785-4932eede-3ad5-4964-ae3c-8ebd6b850a71.png)  
 
+## 添加用户设置权限
+首先为root用户设置密码。设置完成之后添加用户`useradd -m -g users -G wheel,storage,power -s /bin/bash <user>     \\<user>为用户名称`  
+为普通用户设置密码。为新建用户添加权限`EDITOR=nano visudo`上方nano可改为vim。  
+![image](https://user-images.githubusercontent.com/94089248/213198036-57e7493f-3014-43ed-a483-97857f6e177b.png)
+
+## 安装配置systemd启动器
+```
+bootctl install
+```
+```
+nano /boot/loader/entries/arch.conf
+```
+```
+title My arch linux
+linux /vmlinuz-linux
+initrd /intel-ucode.img         //AMD改为amd-ucode.img
+initrd /initramfs-linux.img
+```
+```
+echo "options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/sda3) rw" >> /boot/loader/entries/arch.conf
+```
+再次打开/boot/loader/entries/arch.cong文件检查。
+![image](https://user-images.githubusercontent.com/94089248/213199816-698cabca-8b27-4b63-b6a3-d579accc5d5b.png)  
+
+## 安装基本包
+```
+pacman -S networkmanager network-manager-applet dialog wpa_supplicant dhcpcd
+```
+```
+pacman -S mtools dosfstools bluez bluez-utils cups xdg-utils xdg-user-dirs alsa-utils pulseaudio pulseaudio-bluetooth reflector openssh htop
+```
+## 安装显卡驱动(可选)
+Arch linux给出的驱动根据实际情况安装
+![image](https://user-images.githubusercontent.com/94089248/213201083-d62ae951-026c-4bfe-8397-eb6519ae2c1a.png)  
+我是不准备给Arch直通的所以安装个intel的驱动就行了
+```
+pacman -S xf86-video-intel mesa lib32-mesa intel-compute-runtime
+```
+
+到这里就可以退出chroot环境，使用`umont -R /mnt`解除挂载然后重启使用了。
+
+## 安装中文字体
+```
+sudo pacman -S adobe-source-han-sans-cn-fonts
+sudo pacman -S adobe-source-han-serif-cn-fonts
+sudo pacman -S noto-fonts-sc
+sudo pacman -S wqy-microhei
+sudo pacman -S wqy-zenhei
+sudo pacman -S wqy-bitmapfont
+sudo pacman -S ttf-arphic-ukai
+sudo pacman -S ttf-arphic-uming
+sudo pacman -S opendesktop-fonts
+sudo pacman -S ttf-hannom
+```
