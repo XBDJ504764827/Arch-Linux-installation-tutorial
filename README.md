@@ -118,3 +118,48 @@ Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
 Server = http://mirrors.aliyun.com/archlinux/$repo/os/$arch  
 163源:  
 Server = http://mirrors.163.com/archlinux/$repo/os/i686  
+保存之后执行
+```
+pacman -Syy
+```
+
+## 安装系统及固件
+```
+pacstrap -i /mnt linux linux-headers linux-firmware base base-devel nano vim intel-ucode(cpu为AMD的改为amd-ucode)
+```
+出现选项默认即可。  
+```
+arch-chroot /mnt      //进入系统
+```
+
+## 设置中英文编码格式(可选择在安装完成KDE桌面环境之后更改)
+```
+nano /etc/locale.gen
+```
+找到en_US.UTF-8 UTF-8和zh_CN.UTF-8 UTF-8取消前面#号注释。保存之后输入`locale-gen`更新  
+为防止英文乱码可以需要设置个全局locale  
+```
+nano /etc/locale.conf
+```
+键入`LANG=en_US.UTF-8`保存并退出。  
+下面这个代码为终端,窗口系统，显示管理器配置中文化。
+```
+echo -e "export LANG=zh_CN.UTF-8\nexport LANGUAGE=zh_CN:en_US" > ~/.bashrc && echo -e "export LANG=zh_CN.UTF-8\nexport LANGUAGE=zh_CN:en_US" > ~/.xinitrc && echo -e "export LANG=zh_CN.UTF-8\nexport LANGUAGE=zh_CN:en_US" > ~/.xprofile
+```
+
+## 更改电脑名称以及host
+```
+echo "<name>" > /etc/hostname     //<name>为你想给电脑取的名字
+```
+```
+nano /etc/hosts
+```
+在下方另起新行  
+```
+127.0.0.1 localhost
+::1       localhost
+127.0.1.1 <name>.localdomain  <name>
+```
+my-arch-linux为我为电脑取的名字,写成下方这个样子就可以了  
+![image](https://user-images.githubusercontent.com/94089248/213189785-4932eede-3ad5-4964-ae3c-8ebd6b850a71.png)  
+
