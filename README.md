@@ -199,7 +199,7 @@ Arch linux给出的驱动根据实际情况安装
 ![image](https://user-images.githubusercontent.com/94089248/213201083-d62ae951-026c-4bfe-8397-eb6519ae2c1a.png)  
 我是不准备给Arch直通的所以安装个intel的驱动就行了
 ```
-pacman -S xf86-video-intel mesa lib32-mesa intel-compute-runtime
+pacman -S xf86-video-intel mesa lib32-mesa lib32-vulkan-radeon libva-mesa-driver mesa-vdpau dkms libglvnd
 ```
 
 到这里就可以退出chroot环境，使用`umont -R /mnt`解除挂载然后重启使用了。
