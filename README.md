@@ -129,6 +129,10 @@ pacstrap -i /mnt linux linux-headers linux-firmware base base-devel nano vim int
 ```
 出现选项默认即可。  
 ```
+安装完成之后需要写入
+```
+genfstab -U -p /mnt >> /mnt/etc/fstab
+```
 arch-chroot /mnt      //进入系统
 ```
 
