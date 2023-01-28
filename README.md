@@ -128,10 +128,10 @@ pacman -Syy
 pacstrap -i /mnt linux linux-headers linux-firmware base base-devel nano vim intel-ucode(cpu为AMD的改为amd-ucode)
 ```
 出现选项默认即可。  
-```
 安装完成之后需要写入
 ```
 genfstab -U -p /mnt >> /mnt/etc/fstab
+```
 ```
 arch-chroot /mnt      //进入系统
 ```
