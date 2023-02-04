@@ -136,6 +136,17 @@ genfstab -U -p /mnt >> /mnt/etc/fstab
 arch-chroot /mnt      //进入系统
 ```
 
+安装引导程序
+```
+pacman -S grub efibootmgr
+```
+```
+grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=ArchLinux
+```
+生成grub文件
+```
+grub-mkconfig -o /boot/grub/grub.cfg
+```
 ## 设置中英文编码格式(可选择在安装完成KDE桌面环境之后更改)
 ```
 nano /etc/locale.gen
