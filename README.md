@@ -78,34 +78,22 @@ cgdisk /dev/<name>
 mkfs.fat -F32 /dev/sda1      //boot分区(sda1根据实际情况更改为自己的硬盘名称)
 ```
 ```
-mkswap /dev/sda2      //swap分区
+mkfs.ext4 /dev/sda2   //root分区
 ```
 ```
-swapon /dev/sda2      //启用swap分区
-```
-```
-mkfs.ext4 /dev/sda3   //root分区
-```
-```
-mkfs.ext4 /dev/sda4   //home分区
+mkfs.ext4 /dev/sda3   //home分区
 ```
 上述硬盘名称请自行更改为自己硬盘名称。  
 
 挂载分区(没有的分区需要创建)  
 ```
-mount /dev/sda3 /mnt
+mount /dev/sda2 /mnt
 ```
 ```
-mkdir /mnt/boot
+mkdir -p /mnt/boot/efi
 ```
 ```
-mount /dev/sda1 /mnt/boot
-```
-```
-mkdir /mnt/home
-```
-```
-mount /dev/sda4 /mnt/home
+mount /dev/sda1 /mnt/boot/efi
 ```
 完成之后可以对照下图看看是否正确  
 ![image](https://user-images.githubusercontent.com/94089248/213180105-e8747dea-f74e-4a2b-af1b-7ce103f804fa.png)  
@@ -164,7 +152,7 @@ echo -e "export LANG=zh_CN.UTF-8\nexport LANGUAGE=zh_CN:en_US" > ~/.bashrc && ec
 
 ## 更改电脑名称以及host
 ```
-echo "<name>" > /etc/hostname     //<name>为你想给电脑取的名字
+echo "my-arch-linux" > /etc/hostname     //<name>为你想给电脑取的名字
 ```
 ```
 nano /etc/hosts
@@ -173,7 +161,7 @@ nano /etc/hosts
 ```
 127.0.0.1 localhost
 ::1       localhost
-127.0.1.1 <name>.localdomain  <name>
+127.0.1.1 my-arch-linux.localdomain  my-arch-linux
 ```
 my-arch-linux为我为电脑取的名字,写成下方这个样子就可以了  
 ![image](https://user-images.githubusercontent.com/94089248/213189785-4932eede-3ad5-4964-ae3c-8ebd6b850a71.png)  
@@ -183,28 +171,9 @@ my-arch-linux为我为电脑取的名字,写成下方这个样子就可以了
 为普通用户设置密码。为新建用户添加权限`EDITOR=nano visudo`上方nano可改为vim。  
 ![image](https://user-images.githubusercontent.com/94089248/213198036-57e7493f-3014-43ed-a483-97857f6e177b.png)
 
-## 安装配置systemd启动器
-```
-bootctl install
-```
-```
-nano /boot/loader/entries/arch.conf
-```
-```
-title My arch linux
-linux /vmlinuz-linux
-initrd /intel-ucode.img         //AMD改为amd-ucode.img
-initrd /initramfs-linux.img
-```
-```
-echo "options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/sda3) rw" >> /boot/loader/entries/arch.conf
-```
-再次打开/boot/loader/entries/arch.cong文件检查。
-![image](https://user-images.githubusercontent.com/94089248/213199816-698cabca-8b27-4b63-b6a3-d579accc5d5b.png)  
-
 ## 安装基本包
 ```
-pacman -S networkmanager network-manager-applet dialog wpa_supplicant dhcpcd
+pacman -S network-manager-applet dialog wpa_supplicant dhcpcd
 ```
 ```
 pacman -S mtools dosfstools bluez bluez-utils cups xdg-utils xdg-user-dirs alsa-utils pulseaudio pulseaudio-bluetooth reflector openssh htop
@@ -217,18 +186,20 @@ Arch linux给出的驱动根据实际情况安装
 pacman -S xf86-video-intel mesa libva-mesa-driver mesa-vdpau dkms libglvnd
 ```
 
-到这里就可以退出chroot环境，使用`umont -R /mnt`解除挂载然后重启使用了。
+到这里就可以退出chroot环境，使用`umount -R /mnt`解除挂载然后重启使用了。
 
 ## 安装中文字体
 ```
-sudo pacman -S adobe-source-han-sans-cn-fonts
-sudo pacman -S adobe-source-han-serif-cn-fonts
-sudo pacman -S noto-fonts-sc
-sudo pacman -S wqy-microhei
 sudo pacman -S wqy-zenhei
-sudo pacman -S wqy-bitmapfont
-sudo pacman -S ttf-arphic-ukai
-sudo pacman -S ttf-arphic-uming
-sudo pacman -S opendesktop-fonts
-sudo pacman -S ttf-hannom
+```
+## 安装kde桌面环境
+```
+pacman -S xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock xterm
+```
+```
+pacman -S sddm plasma
+```
+进入桌面安装软件  
+```
+sudo pacman -S neofetch dolphin firefox-deveoper-edition ark p7zip git wget kata bashtop partitionmanager kdeconnect
 ```
